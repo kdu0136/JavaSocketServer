@@ -42,6 +42,7 @@ public class Room {
 			requestHandler.addCommand("createGameRoom",new CommandExecutorCreateGameRoom()); //게임 방 생성
 			requestHandler.addCommand("createChatRoom",new CommandExecutorCreateChatRoom()); //채팅 방 생성
 			requestHandler.addCommand("enterGameRoom",new CommandExecutorEnterGameRoom()); //게임 방 입장
+			requestHandler.addCommand("enterInviteGameRoom",new CommandExecutorEnterInviteGameRoom()); //초대 게임 방 입장
 			
 			requestHandler.addCommand("exitGameRoom",new CommandExecutorExitGameRoom()); //게임 방 나가기	
 			requestHandler.addCommand("gameChat",new CommandExecutorGameChat()); //게임 방 채팅 명령
