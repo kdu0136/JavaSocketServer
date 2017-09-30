@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 //채팅 서버 객체
 public class Server implements TCPServer {
@@ -44,6 +45,7 @@ public class Server implements TCPServer {
 		server_ = new ServerSocket(PORT); //서버 소켓 생성
 		ServerLog.getInstance().log(this.getClass().getName(),"서버가 시작합니다.");
 		this.roomManager_.addRoom(this.waitingRoom_); //룸 매니저에 대기실(default room)을 생성
+		createSampleGameRoom();
 //		this.roomManager_.loadChatRoom(); //채팅 방 불러오기
 			
 		while(true){
@@ -59,6 +61,26 @@ public class Server implements TCPServer {
 			}
 		}
 		ServerLog.getInstance().log(this.getClass().getName(),"서버가 종료되었습니다.");
+	}
+	
+	private void createSampleGameRoom(){	
+		for(int i=0; i<6; i++){
+			String[] key = {"a", "b", "c", "d", "e", "f"}; //방 키값
+			String[] name = {"같이 게임 즐겨요", "나보다 잘 그리는사람??", "고수의 게임방 입니다.", "스파이더맨의 게임방 입니다.", "베트맨의 게임방 입니다.", "아이언맨의 게임방 입니다."}; //방 제목
+			Boolean[] isLock = {false, false, false, true, false, true}; //방 잠금 유무
+			String[] password = {"null", "null", "null", "null", "null", "null"}; //방 비밀번호
+			Long[] maxNum = {(long) 8, (long) 6, (long) 4, (long) 2, (long) 4, (long) 3}; //방 최대 인원
+			Boolean[] isStart = {false, false,  true, true, false, true}; //방 시작 유무
+			Integer[] num = {4, 5, 4, 2, 1, 3};
+						
+			GameRoom gameRoom = new GameRoom(key[i], name[i], isLock[i], password[i], maxNum[i]); //방 생성
+			gameRoom.isStart_ = isStart[i];
+			for(int j=0; j<num[i]; j++){
+				ClientHandler ch = new ClientHandler(key[i]+String.valueOf(j));	
+				gameRoom.enterClient(ch);
+			}
+			this.roomManager_.addRoom(gameRoom); //RoomManager에 방 추가
+		}
 	}
 	
 	/**********************************
